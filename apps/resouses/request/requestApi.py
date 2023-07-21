@@ -6,7 +6,6 @@ from common.httpClient import Request
 class HttpRequest(Resource):
   def post(self):
     data = request.get_json()
-    print(data)
     method = data.get("method")
     if not method:
         return jsonify(dict(code=101, msg="请求方式不能为空"))
