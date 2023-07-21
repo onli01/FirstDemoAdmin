@@ -32,9 +32,9 @@ class Login(Resource):
   
 class getUser(Resource):
   def get(self):
-    # data = request.get_json()
-    # username = data.get('username')
-    username =request.args['username']
+    data = request.get_json()
+    username = data.get('username')
+    # username =request.args['username']
     if not username:
       return jsonify(dict(code=101,msg='用户名不能为空'))
     user,result = UserView.get_user(username)
