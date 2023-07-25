@@ -1,4 +1,4 @@
-from sqlalchemy import DATETIME, TEXT, Integer, String
+from sqlalchemy import TEXT, DateTime, Integer, String
 from exts import db
 from datetime import datetime
 
@@ -15,22 +15,22 @@ class TestCase(db.Model):
     project_id = db.Column(Integer, comment="所属项目")
     tag = db.Column(String(64), comment="用例标签")
     status = db.Column(Integer, comment="用例状态: 1: 待完成 2: 暂时关闭 3: 正常运作")
-    expected = db.Column(TEXT, comment="预期结果, 支持el表达式", nullable=False)
-    create_time = db.Column(DATETIME, nullable=False)
-    update_time = db.Column(DATETIME, nullable=False)
+    expected = db.Column(TEXT, nullable=False, comment="预期结果, 支持el表达式")
+    create_time = db.Column(DateTime, nullable=False,comment='创建时间')
+    update_time = db.Column(DateTime, nullable=False,comment='更新时间')
    
 
-    def __init__(self, name, request_type, url, project_id, tag, status, expected, create_user, request_header=None,
+    def __init__(self, name, request_type, url,params,body, project_id, tag, status, expected, request_header=None,
                  request_method=None):
         self.name = name
         self.request_type = request_type
         self.url = url
+        self.params = params
+        self.body = body
         self.project_id = project_id
         self.tag = tag
         self.status = status
         self.expected = expected
-        self.create_user = create_user
-        self.update_user = create_user
         self.request_header = request_header
         self.request_method = request_method
         self.create_time = datetime.now()

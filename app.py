@@ -5,6 +5,8 @@ from flask_cors import CORS
 from config import Config
 from exts import db
 from apps.models.user import User
+from apps.models.project import Project
+from apps.models.testCase import TestCase
 from apps.resouses.user import userbp
 from apps.resouses.request import requestbp
 
