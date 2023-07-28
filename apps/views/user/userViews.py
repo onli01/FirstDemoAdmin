@@ -50,3 +50,15 @@ class UserView(object):
     except Exception as e:
       #log.info(f'用户{username}登录失败:{str(e)}')
       return None,str(e)
+    
+  @staticmethod 
+  def user_list():
+    try:
+      userList = User.query.filter_by(status = 1).all()
+      if userList :
+        return userList,None 
+      else:
+        return None,'暂无数据！'
+    except Exception as e:
+      #log.info(f'用户{username}登录失败:{str(e)}')
+      return None,str(e)

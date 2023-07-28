@@ -1,6 +1,16 @@
-from flask_restful import Resource,request,marshal
+from flask_restful import Resource,request,fields,marshal
 from flask import jsonify
 from apps.views.project.projectViews import ProjectView
+
+project_field={
+  'id':fields.Integer(),
+  'name':fields.String(),
+  'status':fields.Integer(),
+  'description':fields.String(),
+  'create_time':fields.String(),
+  'update_time':fields.String(),
+  'private':fields.Integer()
+}
 
 class AddProject(Resource):
 
@@ -13,3 +23,29 @@ class AddProject(Resource):
     if result is not None:
       return jsonify(dict(code=101,msg=result))
     return jsonify(dict(code=200,msg='添加成功'))
+  
+
+class GetProject(Resource):
+
+  def get(self):
+    # data = request.get_json()
+    # name = data.get('name')
+    name = request.args['name']
+    print(name)
+    if not name:
+      return jsonify(dict(code=101,msg='项目名称为空'))
+    result,message = ProjectView.get_project(name)
+    print(result)
+    if message is not None:
+      return jsonify(dict(code=101,msg=message))
+    project = marshal(result,project_field)
+    return jsonify(dict(code=200,msg='',data=dict(list=project)))
+  
+class ProjectList(Resource):
+
+  def get(self):
+    result,message = ProjectView.project_list()
+    if message is not None:
+      return jsonify(dict(code=101,msg=message))
+    project = marshal(result,project_field)
+    return jsonify(dict(code=200,msg='',data=dict(list=project)))

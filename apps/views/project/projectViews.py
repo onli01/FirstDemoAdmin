@@ -22,3 +22,28 @@ class ProjectView(object):
       # log.info(f"添加失败：{str(e)}")
       return str(e)
     return None
+  
+  @staticmethod 
+  def get_project(name):
+    try:
+      project = Project.query.filter_by(name = name).first()
+      if project :
+        return project,None 
+      else:
+        return None,'项目不存在！'
+    except Exception as e:
+      #log.info(f'用户{username}登录失败:{str(e)}')
+      return None,str(e)
+    
+    
+  @staticmethod 
+  def project_list():
+    try:
+      project = Project.query.filter_by(status=1).all()
+      if project :
+        return project,None 
+      else:
+        return None,'暂无数据！'
+    except Exception as e:
+      #log.info(f'用户{username}登录失败:{str(e)}')
+      return None,str(e)
