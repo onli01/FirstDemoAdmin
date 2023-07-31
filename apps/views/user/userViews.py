@@ -13,7 +13,7 @@ class UserView(object):
     :return:
     """
     try:
-      user = User.query.filter_by(username = username).first()
+      user = User.query.filter_by(username = username).all()
       if user is not None:
         raise Exception('用户名已存在')
       user= User(username,password)
@@ -42,7 +42,7 @@ class UserView(object):
   @staticmethod 
   def get_user(username):
     try:
-      user = User.query.filter_by(username = username).first()
+      user = User.query.filter_by(username = username).all()
       if user :
         return user,None 
       else:

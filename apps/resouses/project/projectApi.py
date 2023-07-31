@@ -1,5 +1,5 @@
 from flask_restful import Resource,request,fields,marshal
-from flask import jsonify
+from common.httpResponse import success_result,params_error
 from apps.views.project.projectViews import ProjectView
 
 project_field={
@@ -18,11 +18,11 @@ class AddProject(Resource):
     data = request.get_json()
     name,owner = data.get('name'),data.get('owner')
     if not name or not owner:
-      return jsonify(dict(code=101,msg='项目名称或所属人不能为空'))
-    result = ProjectView.add_project(name,owner)
-    if result is not None:
-      return jsonify(dict(code=101,msg=result))
-    return jsonify(dict(code=200,msg='添加成功'))
+      return params_error(msg='项目名称或所属人不能为空')
+    message = ProjectView.add_project(name,owner)
+    if message is not None:
+      return params_error(msg=message)
+    return success_result(msg='添加成功')
   
 
 class GetProject(Resource):
@@ -33,19 +33,19 @@ class GetProject(Resource):
     name = request.args['name']
     print(name)
     if not name:
-      return jsonify(dict(code=101,msg='项目名称为空'))
+      return params_error(msg='项目名称为空')
     result,message = ProjectView.get_project(name)
     print(result)
     if message is not None:
-      return jsonify(dict(code=101,msg=message))
+      return params_error(msg=message)
     project = marshal(result,project_field)
-    return jsonify(dict(code=200,msg='',data=dict(list=project)))
+    return success_result(data=dict(list=project))
   
 class ProjectList(Resource):
 
   def get(self):
     result,message = ProjectView.project_list()
     if message is not None:
-      return jsonify(dict(code=101,msg=message))
+      return params_error(msg=message)
     project = marshal(result,project_field)
-    return jsonify(dict(code=200,msg='',data=dict(list=project)))
+    return success_result(data=dict(list=project))

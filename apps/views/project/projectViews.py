@@ -26,7 +26,7 @@ class ProjectView(object):
   @staticmethod 
   def get_project(name):
     try:
-      project = Project.query.filter_by(name = name).first()
+      project = Project.query.filter_by(name = name).all()
       if project :
         return project,None 
       else:
