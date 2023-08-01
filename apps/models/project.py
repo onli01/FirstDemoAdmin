@@ -13,8 +13,9 @@ class Project(db.Model):
     update_time = db.Column(DateTime,onupdate=datetime.now,comment='更新时间')
     private = db.Column(Integer,comment='是否私有,0:否;1:是')
     
-    def __init__(self, name, owner,private=0,status=1):
+    def __init__(self, name, owner,private=0,status=1,**kwargs):
       self.name = name
       self.owner = owner
       self.private = private
       self.status = status
+      self.description = kwargs['description']

@@ -23,7 +23,7 @@ class Register(Resource):
     username,password = data.get('username'),data.get('password')
     if not username or not password:
       return params_error(msg='用户名或密码不能为空')
-    message = UserView.add_user(username,password)
+    message = UserView.addUser(username,password)
     if message is not None:
       return params_error(msg=message)
     return success_result(msg='注册成功')
@@ -43,14 +43,21 @@ class Login(Resource):
     return success_result(msg='登录成功',data=dict(user=user,token=token))
   
   
-class GetUser(Resource):
+class OutLogin(Resource):
+  def post(self):
+    message = UserView.outLogin()
+    return success_result(msg=message)
+  
+  
+class GetUserByName(Resource):
   def get(self):
     data = request.get_json()
     username = data.get('username')
     # username =request.args['username']
     if not username:
-      return params_error(msg='用户名不能为空')
-    result,message = UserView.get_user(username)
+      result,message = UserView.getUserAll()
+    else:
+      result,message = UserView.getUserByName(username)
     if message is not None:
       return params_error(msg=message)
     print(result)
@@ -58,9 +65,9 @@ class GetUser(Resource):
     return success_result(data=dict(list=user))
   
   
-class UserList(Resource):
+class GetUserAll(Resource):
   def get(self):
-    result,message = UserView.user_list()
+    result,message = UserView.getUserAll()
     if message is not None:
       return params_error(msg=message)
     print(result)

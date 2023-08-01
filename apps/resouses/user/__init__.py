@@ -7,5 +7,6 @@ api = Api(userbp)
 
 api.add_resource(Register,'/register')
 api.add_resource(Login,'/login')
-api.add_resource(GetUser,'/getUser')
-api.add_resource(UserList,'/userList')
+api.add_resource(GetUserByName,'/getUser')
+api.add_resource(GetUserAll,'/getUserAll')
+api.add_resource(OutLogin,'/outLogin')

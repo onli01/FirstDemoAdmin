@@ -6,7 +6,7 @@ from exts import db
 class UserView(object):
   
   @staticmethod
-  def add_user(username,password):
+  def addUser(username,password):
     """
     :param username: 用户名
     :param password: 密码
@@ -39,8 +39,14 @@ class UserView(object):
       #log.info(f'用户{username}登录失败:{str(e)}')
       return None,str(e)
     
+    
+  @staticmethod
+  def outLogin():
+    return '退出成功'
+
+    
   @staticmethod 
-  def get_user(username):
+  def getUserByName(username):
     try:
       user = User.query.filter_by(username = username).all()
       if user :
@@ -52,7 +58,7 @@ class UserView(object):
       return None,str(e)
     
   @staticmethod 
-  def user_list():
+  def getUserAll():
     try:
       userList = User.query.filter_by(status = 1).all()
       if userList :

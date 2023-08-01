@@ -6,5 +6,5 @@ projectbp = Blueprint('user', __name__, url_prefix='/project')
 api = Api(projectbp)
 
 api.add_resource(AddProject,'/addProject')
-api.add_resource(GetProject,'/getProject')
-api.add_resource(ProjectList,'/projectList')
+api.add_resource(GetProjectByName,'/getProjectByName')
+api.add_resource(GetProjectAll,'/getProjectAll')
