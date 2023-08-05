@@ -10,8 +10,8 @@ user_fields = {
             'nickname':fields.String(default='--'),
             'email': fields.String(default="--"),
             'img':fields.String(attribute='avatar_image'),
-            'reg_time': fields.String(attribute='create_time'),
-            'last_time':fields.String(attribute='last_login'),
+            'create_time': fields.String(),
+            'last_login':fields.String(),
             'type': fields.Integer(attribute='role'),
             'status':fields.Integer(),
     }
