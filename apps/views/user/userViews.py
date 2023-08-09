@@ -1,7 +1,9 @@
 from datetime import datetime
 from apps.models.user import User
 from exts import db
+from common.handleLog import Logger
 
+log = Logger(logger='userView',loglevel=1).getlog()
 
 class UserView(object):
   
@@ -20,7 +22,7 @@ class UserView(object):
       db.session.add(user)
       db.session.commit()
     except Exception as e:
-      # log.info(f"用户注册失败：{str(e)}")
+      log.info(f"用户{username}注册失败：{str(e)}")
       return str(e)
     return None
   
@@ -36,7 +38,7 @@ class UserView(object):
       else:
         return None,'用户名或密码错误'
     except Exception as e:
-      #log.info(f'用户{username}登录失败:{str(e)}')
+      log.info(f'用户{username}登录失败:{str(e)}')
       return None,str(e)
     
     
@@ -54,7 +56,7 @@ class UserView(object):
       else:
         return None,'用户名不存在！'
     except Exception as e:
-      #log.info(f'用户{username}登录失败:{str(e)}')
+      log.info(f'用户{username}查询失败:{str(e)}')
       return None,str(e)
     
   @staticmethod 
@@ -66,5 +68,5 @@ class UserView(object):
       else:
         return None,'暂无数据！'
     except Exception as e:
-      #log.info(f'用户{username}登录失败:{str(e)}')
+      log.info(f'用户列表获取失败:{str(e)}')
       return None,str(e)

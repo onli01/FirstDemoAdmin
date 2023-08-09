@@ -2,6 +2,9 @@ from flask_restful import Resource,fields, request,marshal
 from common.httpResponse import success_result,params_error
 from apps.views.user.userViews import UserView
 from common.authToken import AuthToken
+from common.handleLog import Logger
+
+log = Logger(logger='userApi',loglevel=1).getlog()
 
 # 定义要返回的字段
 user_fields = {
@@ -20,11 +23,13 @@ class Register(Resource):
 
   def post(self):
     data = request.get_json()
+    log.info(f'参数:{data}')
     username,password = data.get('username'),data.get('password')
     if not username or not password:
       return params_error(msg='用户名或密码不能为空')
     message = UserView.addUser(username,password)
     if message is not None:
+      log.info(message)
       return params_error(msg=message)
     return success_result(msg='注册成功')
   
@@ -32,12 +37,15 @@ class Register(Resource):
 class Login(Resource):
   def post(self):
     data = request.get_json()
+    log.info(f'参数:{data}')
     username,password = data.get('username'),data.get('password')
     if not username or not password:
       return params_error(msg='用户名或密码不能为空')
     result,message = UserView.login(username,password)
     if message is not None:
+      log.info(message)
       return params_error(msg=message)
+    log.info(result)
     user = marshal(result,user_fields)
     token = AuthToken.generate_token(user['user_id'])
     return success_result(msg='登录成功',data=dict(user=user,token=token))
@@ -52,6 +60,7 @@ class OutLogin(Resource):
 class GetUserByName(Resource):
   def get(self):
     data = request.get_json()
+    log.info(f'参数:{data}')
     username = data.get('username')
     # username =request.args['username']
     if not username:
@@ -59,8 +68,9 @@ class GetUserByName(Resource):
     else:
       result,message = UserView.getUserByName(username)
     if message is not None:
+      log.info(message)
       return params_error(msg=message)
-    print(result)
+    log.info(result)
     user = marshal(result,user_fields)
     return success_result(data=dict(list=user))
   
@@ -69,9 +79,9 @@ class GetUserAll(Resource):
   def get(self):
     result,message = UserView.getUserAll()
     if message is not None:
+      log.info(message)
       return params_error(msg=message)
-    print(result)
+    log.info(result)
     user = marshal(result,user_fields)
-    # return jsonify(dict(code=200,msg='',data=dict(list=user)))
     return success_result(data=dict(list=user))
   

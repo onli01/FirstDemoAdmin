@@ -1,5 +1,8 @@
 from apps.models.project import Project
 from exts import db
+from common.handleLog import Logger
+
+log = Logger(logger='projectView',loglevel=1).getlog()
 
 class ProjectView(object):
   
@@ -19,7 +22,7 @@ class ProjectView(object):
       db.session.add(project)
       db.session.commit()
     except Exception as e:
-      # log.info(f"添加失败：{str(e)}")
+      log.info(f"添加失败：{str(e)}")
       return str(e)
     return None
   
@@ -32,7 +35,7 @@ class ProjectView(object):
       else:
         return None,'项目不存在！'
     except Exception as e:
-      #log.info(f'用户{username}登录失败:{str(e)}')
+      log.info(f'查询项目{name}失败:{str(e)}')
       return None,str(e)
     
     
@@ -42,5 +45,5 @@ class ProjectView(object):
       project = Project.query.filter_by(status=1).all()
       return project,None 
     except Exception as e:
-      #log.info(f'用户{username}登录失败:{str(e)}')
+      log.info(f'项目列表获取失败:{str(e)}')
       return None,str(e)

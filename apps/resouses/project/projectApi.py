@@ -1,6 +1,9 @@
 from flask_restful import Resource,request,fields,marshal
 from common.httpResponse import success_result,params_error
 from apps.views.project.projectViews import ProjectView
+from common.handleLog import Logger
+
+log = Logger(logger='projectApi',loglevel=1).getlog()
 
 project_field={
   'id':fields.Integer(),
@@ -17,6 +20,7 @@ class AddProject(Resource):
 
   def post(self):
     data = request.get_json()
+    log.info(f'参数：{data}')
     name,owner = data.get('name'),data.get('owner')
     if not name or not owner:
       return params_error(msg='项目名称或所属人不能为空')
@@ -32,7 +36,7 @@ class GetProjectByName(Resource):
     # data = request.get_json()
     # name = data.get('name')
     name = request.args['name']
-    print(name)
+    log.info(f'参数：{request.args}')
     if not name:
       result,message = ProjectView.getProjectAll()
     else:
