@@ -21,13 +21,13 @@ user_fields = {
 
 class Register(Resource):
 
-  def post(self):
+  async def post(self):
     data = request.get_json()
     log.info(f'参数:{data}')
     username,password = data.get('username'),data.get('password')
     if not username or not password:
       return params_error(msg='用户名或密码不能为空')
-    message = UserView.addUser(username,password)
+    message =await UserView.addUser(username,password)
     if message is not None:
       log.info(message)
       return params_error(msg=message)
@@ -35,38 +35,38 @@ class Register(Resource):
   
   
 class Login(Resource):
-  def post(self):
+  async def post(self):
     data = request.get_json()
     log.info(f'参数:{data}')
     username,password = data.get('username'),data.get('password')
     if not username or not password:
       return params_error(msg='用户名或密码不能为空')
-    result,message = UserView.login(username,password)
+    result,message =await UserView.login(username,password)
     if message is not None:
       log.info(message)
       return params_error(msg=message)
     log.info(result)
     user = marshal(result,user_fields)
-    token = AuthToken.generate_token(user['user_id'])
+    token =await AuthToken.generate_token(user['user_id'])
     return success_result(msg='登录成功',data=dict(user=user,token=token))
   
   
 class OutLogin(Resource):
-  def post(self):
-    message = UserView.outLogin()
+  async def post(self):
+    message =await UserView.outLogin()
     return success_result(msg=message)
   
   
 class GetUserByName(Resource):
-  def get(self):
+  async def get(self):
     data = request.get_json()
     log.info(f'参数:{data}')
     username = data.get('username')
     # username =request.args['username']
     if not username:
-      result,message = UserView.getUserAll()
+      result,message =await UserView.getUserAll()
     else:
-      result,message = UserView.getUserByName(username)
+      result,message =await UserView.getUserByName(username)
     if message is not None:
       log.info(message)
       return params_error(msg=message)
@@ -76,8 +76,8 @@ class GetUserByName(Resource):
   
   
 class GetUserAll(Resource):
-  def get(self):
-    result,message = UserView.getUserAll()
+  async def get(self):
+    result,message =await UserView.getUserAll()
     if message is not None:
       log.info(message)
       return params_error(msg=message)

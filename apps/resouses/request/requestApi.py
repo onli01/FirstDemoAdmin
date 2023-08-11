@@ -7,7 +7,7 @@ log = Logger(logger='requestApi',loglevel=1).getlog()
 
 
 class HttpRequest(Resource):
-  def post(self):
+  async def post(self):
     data = request.get_json()
     log.info(f'参数：{data}')
     method = data.get("method")
@@ -19,5 +19,5 @@ class HttpRequest(Resource):
     body = data.get("body")
     headers = data.get("headers")
     r = Request(url, json=body, headers=headers)
-    response = r.request(method)
+    response =await r.request(method)
     return success_result(data=response, msg="操作成功")

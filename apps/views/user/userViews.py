@@ -8,14 +8,14 @@ log = Logger(logger='userView',loglevel=1).getlog()
 class UserView(object):
   
   @staticmethod
-  def addUser(username,password):
+  async def addUser(username,password):
     """
     :param username: 用户名
     :param password: 密码
     :return:
     """
     try:
-      user = User.query.filter_by(username = username).all()
+      user =await User.query.filter_by(username = username).all()
       if user is not None:
         raise Exception('用户名已存在')
       user= User(username,password)
@@ -27,9 +27,9 @@ class UserView(object):
     return None
   
   @staticmethod
-  def login(username,password):
+  async def login(username,password):
     try:
-      user = User.query.filter_by(username = username).first()
+      user =await User.query.filter_by(username = username).first()
       if user and user.check_password(password):
         user.last_login = datetime.now()
         db.session.commit()
@@ -43,14 +43,14 @@ class UserView(object):
     
     
   @staticmethod
-  def outLogin():
+  async def outLogin():
     return '退出成功'
 
     
   @staticmethod 
-  def getUserByName(username):
+  async def getUserByName(username):
     try:
-      user = User.query.filter_by(username = username).all()
+      user =await User.query.filter_by(username = username).all()
       if user :
         return user,None 
       else:
@@ -60,9 +60,9 @@ class UserView(object):
       return None,str(e)
     
   @staticmethod 
-  def getUserAll():
+  async def getUserAll():
     try:
-      userList = User.query.filter_by(status = 1).all()
+      userList =await User.query.filter_by(status = 1).all()
       if userList :
         return userList,None 
       else:

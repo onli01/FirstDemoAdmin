@@ -18,13 +18,13 @@ project_field={
 
 class AddProject(Resource):
 
-  def post(self):
+  async def post(self):
     data = request.get_json()
     log.info(f'参数：{data}')
     name,owner = data.get('name'),data.get('owner')
     if not name or not owner:
       return params_error(msg='项目名称或所属人不能为空')
-    message = ProjectView.addProject(**data)
+    message = await ProjectView.addProject(**data)
     if message is not None:
       return params_error(msg=message)
     return success_result(msg='添加成功')
@@ -32,15 +32,15 @@ class AddProject(Resource):
 
 class GetProjectByName(Resource):
 
-  def get(self):
+  async def get(self):
     # data = request.get_json()
     # name = data.get('name')
     name = request.args['name']
     log.info(f'参数：{request.args}')
     if not name:
-      result,message = ProjectView.getProjectAll()
+      result,message =await ProjectView.getProjectAll()
     else:
-      result,message = ProjectView.getProjectByName(name)
+      result,message =await ProjectView.getProjectByName(name)
     if message is not None:
       return params_error(msg=message)
     project = marshal(result,project_field)
@@ -48,8 +48,8 @@ class GetProjectByName(Resource):
   
 class GetProjectAll(Resource):
 
-  def get(self):
-    result,message = ProjectView.getProjectAll()
+  async def get(self):
+    result,message =await ProjectView.getProjectAll()
     if message is not None:
       return params_error(msg=message)
     project = marshal(result,project_field)
